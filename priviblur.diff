@@ -1,0 +1,12 @@
+diff --git a/docker/Dockerfile b/docker/Dockerfile
+index f748a4a..0755149 100644
+--- a/docker/Dockerfile
++++ b/docker/Dockerfile
+@@ -5,6 +5,7 @@ COPY ./.git/ ./.git/
+ COPY ./requirements.txt ./requirements.txt
+ COPY ./src/ ./src/
+ COPY ./assets/ ./assets/
++COPY ./config.example.toml ./config.toml
+ COPY ./locales/ ./locales/
+ 
+ RUN apk add --no-cache git python3 py3-setuptools tini && \

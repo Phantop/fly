@@ -1,0 +1,24 @@
+app = '4get'
+primary_region = 'ewr'
+
+[build]
+  image = 'luuul/4get'
+
+[env]
+  FOURGET_DEFAULT_THEME = 'gentoo'
+  FOURGET_SERVER_ADMIN_EMAIL = 'you@example.com'
+  FOURGET_SERVER_NAME = '4get.fly.dev'
+  FOURGET_FILTERED_HEADER_KEYS = ''
+
+[http_service]
+  internal_port = 80
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256

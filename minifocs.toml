@@ -1,0 +1,29 @@
+app = 'minifocs'
+primary_region = 'ewr'
+
+[build]
+  image = 'miniflux/miniflux:nightly'
+
+[env]
+  CLEANUP_ARCHIVE_UNREAD_DAYS = '-1'
+  HTTP_CLIENT_TIMEOUT = '50'
+  POLLING_FREQUENCY = '10'
+  POLLING_PARSING_ERROR_LIMIT = '0'
+  POLLING_SCHEDULER = 'entry_frequency'
+  PROXY_OPTION = 'all'
+  RUN_MIGRATIONS = '1'
+  SCHEDULER_ENTRY_FREQUENCY_MAX_INTERVAL = '50'
+  YOUTUBE_EMBED_URL_OVERRIDE = 'https://www.youtube.com/embed/'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  cpu_kind = 'shared'
+  cpus = 1
+  memory_mb = 256

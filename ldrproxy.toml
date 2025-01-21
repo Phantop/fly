@@ -1,0 +1,20 @@
+app = 'ldrproxy'
+primary_region = 'ewr'
+
+[build]
+  image = 'ghcr.io/everywall/ladder'
+
+[env]
+  RULESET = 'https://raw.githubusercontent.com/everywall/ladder-rules/main/ruleset.yaml'
+  USERPASS = 'glados:glados'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+[[vm]]
+  size = 'shared-cpu-1x'

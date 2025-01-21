@@ -1,0 +1,12 @@
+[submodule "fluxwidget"]
+	path = fluxwidget
+	url = https://github.com/Phantop/fluxwidget.git
+[submodule "invcast"]
+	path = invcast
+	url = https://github.com/Phantop/invcast.git
+[submodule "priviblur"]
+	path = priviblur
+	url = https://github.com/syeopite/priviblur.git
+[submodule "rss"]
+	path = rss
+	url = https://github.com/Phantop/rss.git
