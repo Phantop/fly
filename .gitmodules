@@ -7,3 +7,6 @@
 [submodule "rss"]
 	path = rss
 	url = https://github.com/Phantop/rss.git
+[submodule "minifocs"]
+	path = minifocs
+	url = https://github.com/miniflux/v2

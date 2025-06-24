@@ -1,0 +1,81 @@
+diff --git i/internal/storage/entry.go w/internal/storage/entry.go
+index d2063318..9c3bdf7f 100644
+--- i/internal/storage/entry.go
++++ w/internal/storage/entry.go
+@@ -629,7 +629,6 @@ func (s *Storage) UnshareEntry(userID int64, entryID int64) (err error) {
+ }
+ 
+ func removeDuplicates(l []string) []string {
+-	slices.Sort(l)
+ 	return slices.Compact(l)
+ }
+ 
+diff --git i/internal/template/templates/views/entry.html w/internal/template/templates/views/entry.html
+index e5ef1967..a961afac 100644
+--- i/internal/template/templates/views/entry.html
++++ w/internal/template/templates/views/entry.html
+@@ -67,14 +67,21 @@
+                 </li>
+                 {{ else }}
+                 <li>
+-                    <form method="post" action="{{route "shareEntry" "entryID" .entry.ID }}">
+-                        <input type="hidden" name="csrf" value="{{ .csrf }}">
+-                        <button type="submit" class="page-button">
+-                            {{ icon "share" }}<span class="icon-label">{{ t "entry.share.label" }}</span>
+-                        </button>
+-                    </form>
++                    <a href="{{ route "shareEntry" "entryID" .entry.ID }}"
++                        class="page-link"
++                        title="{{ t "entry.share.title" }}"
++                        data-share-status="share"
++                        target="_blank">{{ icon "share" }}<span class="icon-label">{{ t "entry.share.label" }}</span></a>
+                 </li>
+                 {{ end }}
++                <li>
++                    <a href="{{ .entry.URL | safeURL  }}"
++                        class="page-link"
++                        {{ if $.user.OpenExternalLinksInNewTab }}target="_blank"{{ end }}
++                        rel="noopener noreferrer"
++                        referrerpolicy="no-referrer"
++                        data-original-link="{{ .user.MarkReadOnView }}">{{ icon "external-link" }}<span class="icon-label">{{ t "entry.external_link.label" }}</span></a>
++                </li>
+                 <li>
+                     <button
+                         class="page-button"
+@@ -130,7 +137,7 @@
+             {{ t "entry.tags.label" }}
+             {{ $allTags := .entry.Tags }}
+             {{ $numTags := len $allTags }}
+-            {{ $tagsLimit := 5 }}
++            {{ $tagsLimit := 500 }}
+             {{ $numerOfAdditionalTags := subtract $numTags $tagsLimit }}
+ 
+             <ul class="entry-tags-list">
+@@ -165,14 +172,6 @@
+             {{ end }}
+         </div>
+         {{ end }}
+-        <div class="entry-external-link">
+-            <a
+-                href="{{ .entry.URL | safeURL  }}"
+-                {{ if $.user.OpenExternalLinksInNewTab }}target="_blank"{{ end }}
+-                rel="noopener noreferrer"
+-                referrerpolicy="no-referrer"
+-                data-original-link="{{ $.user.MarkReadOnView }}">{{ .entry.URL }}</span></a>
+-        </div>
+         <div class="entry-date">
+             {{ if .user }}
+             <time datetime="{{ isodate .entry.Date }}" title="{{ isodate .entry.Date }}">{{ elapsed $.user.Timezone .entry.Date }}</time>
+diff --git i/internal/ui/ui.go w/internal/ui/ui.go
+index d70d4883..12a0c155 100644
+--- i/internal/ui/ui.go
++++ w/internal/ui/ui.go
+@@ -108,7 +108,7 @@ func Serve(router *mux.Router, store *storage.Storage, pool *worker.Pool) {
+ 	uiRouter.HandleFunc("/entry/bookmark/{entryID}", handler.toggleBookmark).Name("toggleBookmark").Methods(http.MethodPost)
+ 
+ 	// Share pages.
+-	uiRouter.HandleFunc("/entry/share/{entryID}", handler.createSharedEntry).Name("shareEntry").Methods(http.MethodPost)
++	uiRouter.HandleFunc("/entry/share/{entryID}", handler.createSharedEntry).Name("shareEntry").Methods(http.MethodGet)
+ 	uiRouter.HandleFunc("/entry/unshare/{entryID}", handler.unshareEntry).Name("unshareEntry").Methods(http.MethodPost)
+ 	uiRouter.HandleFunc("/share/{shareCode}", handler.sharedEntry).Name("sharedEntry").Methods(http.MethodGet)
+ 	uiRouter.HandleFunc("/shares", handler.sharedEntries).Name("sharedEntries").Methods(http.MethodGet)

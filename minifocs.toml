@@ -2,7 +2,7 @@ app = 'minifocs'
 primary_region = 'ewr'
 
 [build]
-  image = 'miniflux/miniflux:nightly'
+  dockerfile = 'minifocs/packaging/docker/alpine/Dockerfile'
 
 [env]
   CLEANUP_ARCHIVE_UNREAD_DAYS = -1
