@@ -1,6 +1,3 @@
-[submodule "fluxwidget"]
-	path = fluxwidget
-	url = https://github.com/Phantop/fluxwidget.git
 [submodule "invcast"]
 	path = invcast
 	url = https://github.com/Phantop/invcast.git
