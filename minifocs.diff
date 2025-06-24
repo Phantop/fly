@@ -11,7 +11,7 @@ index d2063318..9c3bdf7f 100644
  }
  
 diff --git i/internal/template/templates/views/entry.html w/internal/template/templates/views/entry.html
-index e5ef1967..a961afac 100644
+index e5ef1967..9ef36795 100644
 --- i/internal/template/templates/views/entry.html
 +++ w/internal/template/templates/views/entry.html
 @@ -67,14 +67,21 @@
@@ -66,6 +66,15 @@ index e5ef1967..a961afac 100644
          <div class="entry-date">
              {{ if .user }}
              <time datetime="{{ isodate .entry.Date }}" title="{{ isodate .entry.Date }}">{{ elapsed $.user.Timezone .entry.Date }}</time>
+@@ -251,7 +250,7 @@
+     {{ end }}
+ </article>
+ {{ if .entry.Enclosures }}
+-<details class="entry-enclosures">
++<details class="entry-enclosures" open>
+     <summary>{{ t "page.entry.attachments" }} ({{ len .entry.Enclosures }})</summary>
+     {{ range .entry.Enclosures }}
+     {{ if ne .URL "" }}
 diff --git i/internal/ui/ui.go w/internal/ui/ui.go
 index d70d4883..12a0c155 100644
 --- i/internal/ui/ui.go
