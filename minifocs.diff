@@ -1,15 +1,15 @@
-diff --git i/internal/storage/entry.go w/internal/storage/entry.go
-index d2063318..9c3bdf7f 100644
---- i/internal/storage/entry.go
-+++ w/internal/storage/entry.go
-@@ -629,7 +629,6 @@ func (s *Storage) UnshareEntry(userID int64, entryID int64) (err error) {
- }
+diff --git i/internal/reader/rss/adapter.go w/internal/reader/rss/adapter.go
+index 8c0e3c4d..863e06b7 100644
+--- i/internal/reader/rss/adapter.go
++++ w/internal/reader/rss/adapter.go
+@@ -136,7 +136,6 @@ func (r *RSSAdapter) BuildFeed(baseURL string) *model.Feed {
+ 			entry.Tags = findFeedTags(&r.rss.Channel)
+ 		}
+ 		// Sort and deduplicate tags.
+-		slices.Sort(entry.Tags)
+ 		entry.Tags = slices.Compact(entry.Tags)
  
- func removeDuplicates(l []string) []string {
--	slices.Sort(l)
- 	return slices.Compact(l)
- }
- 
+ 		feed.Entries = append(feed.Entries, entry)
 diff --git i/internal/template/templates/views/entry.html w/internal/template/templates/views/entry.html
 index e5ef1967..9ef36795 100644
 --- i/internal/template/templates/views/entry.html
