@@ -1,8 +1,8 @@
 diff --git i/internal/reader/rss/adapter.go w/internal/reader/rss/adapter.go
-index 8c0e3c4d..863e06b7 100644
+index 95c86484..38830914 100644
 --- i/internal/reader/rss/adapter.go
 +++ w/internal/reader/rss/adapter.go
-@@ -136,7 +136,6 @@ func (r *RSSAdapter) BuildFeed(baseURL string) *model.Feed {
+@@ -132,7 +132,6 @@ func (r *rssAdapter) buildFeed(baseURL string) *model.Feed {
  			entry.Tags = findFeedTags(&r.rss.Channel)
  		}
  		// Sort and deduplicate tags.
@@ -11,24 +11,11 @@ index 8c0e3c4d..863e06b7 100644
  
  		feed.Entries = append(feed.Entries, entry)
 diff --git i/internal/template/templates/views/entry.html w/internal/template/templates/views/entry.html
-index e5ef1967..9ef36795 100644
+index 0b8e45dd..208f2407 100644
 --- i/internal/template/templates/views/entry.html
 +++ w/internal/template/templates/views/entry.html
-@@ -67,14 +67,21 @@
-                 </li>
-                 {{ else }}
-                 <li>
--                    <form method="post" action="{{route "shareEntry" "entryID" .entry.ID }}">
--                        <input type="hidden" name="csrf" value="{{ .csrf }}">
--                        <button type="submit" class="page-button">
--                            {{ icon "share" }}<span class="icon-label">{{ t "entry.share.label" }}</span>
--                        </button>
--                    </form>
-+                    <a href="{{ route "shareEntry" "entryID" .entry.ID }}"
-+                        class="page-link"
-+                        title="{{ t "entry.share.title" }}"
-+                        data-share-status="share"
-+                        target="_blank">{{ icon "share" }}<span class="icon-label">{{ t "entry.share.label" }}</span></a>
+@@ -114,6 +114,14 @@
+                     </form>
                  </li>
                  {{ end }}
 +                <li>
@@ -42,7 +29,7 @@ index e5ef1967..9ef36795 100644
                  <li>
                      <button
                          class="page-button"
-@@ -130,7 +137,7 @@
+@@ -167,7 +175,7 @@
              {{ t "entry.tags.label" }}
              {{ $allTags := .entry.Tags }}
              {{ $numTags := len $allTags }}
@@ -51,22 +38,20 @@ index e5ef1967..9ef36795 100644
              {{ $numerOfAdditionalTags := subtract $numTags $tagsLimit }}
  
              <ul class="entry-tags-list">
-@@ -165,14 +172,6 @@
+@@ -202,12 +210,6 @@
              {{ end }}
          </div>
          {{ end }}
 -        <div class="entry-external-link">
 -            <a
 -                href="{{ .entry.URL | safeURL  }}"
--                {{ if $.user.OpenExternalLinksInNewTab }}target="_blank"{{ end }}
--                rel="noopener noreferrer"
--                referrerpolicy="no-referrer"
+-                {{ if $.user.OpenExternalLinksInNewTab }}target="_blank"{{ else }}rel="noopener"{{ end }}
 -                data-original-link="{{ $.user.MarkReadOnView }}">{{ .entry.URL }}</span></a>
 -        </div>
          <div class="entry-date">
              {{ if .user }}
              <time datetime="{{ isodate .entry.Date }}" title="{{ isodate .entry.Date }}">{{ elapsed $.user.Timezone .entry.Date }}</time>
-@@ -251,7 +250,7 @@
+@@ -286,7 +288,7 @@
      {{ end }}
  </article>
  {{ if .entry.Enclosures }}
@@ -75,16 +60,3 @@ index e5ef1967..9ef36795 100644
      <summary>{{ t "page.entry.attachments" }} ({{ len .entry.Enclosures }})</summary>
      {{ range .entry.Enclosures }}
      {{ if ne .URL "" }}
-diff --git i/internal/ui/ui.go w/internal/ui/ui.go
-index d70d4883..12a0c155 100644
---- i/internal/ui/ui.go
-+++ w/internal/ui/ui.go
-@@ -108,7 +108,7 @@ func Serve(router *mux.Router, store *storage.Storage, pool *worker.Pool) {
- 	uiRouter.HandleFunc("/entry/bookmark/{entryID}", handler.toggleBookmark).Name("toggleBookmark").Methods(http.MethodPost)
- 
- 	// Share pages.
--	uiRouter.HandleFunc("/entry/share/{entryID}", handler.createSharedEntry).Name("shareEntry").Methods(http.MethodPost)
-+	uiRouter.HandleFunc("/entry/share/{entryID}", handler.createSharedEntry).Name("shareEntry").Methods(http.MethodGet)
- 	uiRouter.HandleFunc("/entry/unshare/{entryID}", handler.unshareEntry).Name("unshareEntry").Methods(http.MethodPost)
- 	uiRouter.HandleFunc("/share/{shareCode}", handler.sharedEntry).Name("sharedEntry").Methods(http.MethodGet)
- 	uiRouter.HandleFunc("/shares", handler.sharedEntries).Name("sharedEntries").Methods(http.MethodGet)
