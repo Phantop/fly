@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>AO3 Yuri Index</title>
+        <link rel="stylesheet" href="https://unpkg.com/@picocss/pico@latest/css/pico.classless.min.css" type="text/css">
+        <style>
+section > div {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+        </style>
+    </head>
+    <body>
+        <main id="main">
+            <section>
+                <h1>AO3 Yuri Index</h1>
+                <p>Note: AO3 rate limiting may sometimes result in erroneous 0's. Just try again if that happens.</p>
+                <form method="POST">
+                    <input type="text" name="fandom_input" placeholder="Type tag (e.g. 'Deltarune (Video Game)' or 'Trans Female Character') or a work list URL" value="{{ fandom_input or '' }}" required>
+                    <button type="submit">Calculate Stats</button>
+                </form>
+            </section>
+
+            {% if results %}
+            <section>
+                <h2>Results for {{ fandom_input }}</h2>
+
+                {% for group in results %}
+                <section>
+                    <h3>{{ group.name }} Stats</h3>
+                    <div>
+                        <article>
+                            <h4>Work Counts</h4>
+                            <ul>
+                                <li><strong>F/F:</strong> {{ "{:,}".format(group.stats.ff) }}</li>
+                                <li><strong>F/M:</strong> {{ "{:,}".format(group.stats.fm) }}</li>
+                                <li><strong>M/M:</strong> {{ "{:,}".format(group.stats.mm) }}</li>
+                            </ul>
+                        </article>
+                        <article>
+                            <h4>Ratios</h4>
+                            <ul>
+                                <li><strong>F/F to F/M:</strong> {{ group.stats.ff_fm }}</li>
+                                <li><strong>F/M to M/M:</strong> {{ group.stats.fm_mm }}</li>
+                                <li><strong>F/F to M/M:</strong> {{ group.stats.ff_mm }}</li>
+                                <li><strong>F/F to (F/M + M/M):</strong> {{ group.stats.ff_fmmm }}</li>
+                            </ul>
+                        </article>
+                    </div>
+                </section>
+                {% endfor %}
+            </section>
+            {% endif %}
+        </main>
+    </body>
+</html>
