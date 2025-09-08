@@ -51,6 +51,7 @@ def calculate_ratios(ff, fm, mm):
             'fm_mm': f"{fm / mm:.2f}" if mm > 0 else "N/A",
             'ff_mm': f"{ff / mm:.2f}" if mm > 0 else "N/A",
             'ff_fmmm': f"{ff / (fm + mm):.2f}" if (fm + mm) > 0 else "N/A",
+            'fffm_mm': f"{(ff + fm) / mm:.2f}" if mm > 0 else "N/A",
             }
 
 class Stats:
@@ -63,6 +64,7 @@ class Stats:
         self.fm_mm = ratios['fm_mm']
         self.ff_mm = ratios['ff_mm']
         self.ff_fmmm = ratios['ff_fmmm']
+        self.fffm_mm = ratios['fffm_mm']
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
