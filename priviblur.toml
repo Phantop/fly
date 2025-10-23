@@ -1,4 +1,4 @@
-app = 'priviblur'
+app = 'prvblr'
 primary_region = 'ewr'
 swap_size_mb = 512
 
