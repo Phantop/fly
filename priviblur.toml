@@ -3,7 +3,7 @@ primary_region = 'ewr'
 swap_size_mb = 512
 
 [build]
-  dockerfile = 'docker/Dockerfile'
+  image = 'quay.io/pussthecatorg/priviblur'
 
 [http_service]
   internal_port = 8000
@@ -17,3 +17,7 @@ swap_size_mb = 512
   cpu_kind = 'shared'
   cpus = 1
   memory_mb = 256
+
+[[files]]
+  guest_path = "/priviblur/config.toml"
+  local_path = "config.toml"
