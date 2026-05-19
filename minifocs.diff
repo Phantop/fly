@@ -1,8 +1,8 @@
 diff --git i/internal/reader/rss/adapter.go w/internal/reader/rss/adapter.go
-index 95c86484..38830914 100644
+index a33d72c1..deb8e460 100644
 --- i/internal/reader/rss/adapter.go
 +++ w/internal/reader/rss/adapter.go
-@@ -132,7 +132,6 @@ func (r *rssAdapter) buildFeed(baseURL string) *model.Feed {
+@@ -151,7 +151,6 @@ func (r *rssAdapter) buildFeed(baseURL string) *model.Feed {
  			entry.Tags = findFeedTags(&r.rss.Channel)
  		}
  		// Sort and deduplicate tags.
@@ -11,15 +11,15 @@ index 95c86484..38830914 100644
  
  		feed.Entries = append(feed.Entries, entry)
 diff --git i/internal/template/templates/views/entry.html w/internal/template/templates/views/entry.html
-index 0b8e45dd..208f2407 100644
+index b975d961..16cb0ce1 100644
 --- i/internal/template/templates/views/entry.html
 +++ w/internal/template/templates/views/entry.html
-@@ -114,6 +114,14 @@
+@@ -116,6 +116,14 @@
                      </form>
                  </li>
                  {{ end }}
 +                <li>
-+                    <a href="{{ .entry.URL | safeURL  }}"
++                    <a href="{{ .entry.URL | untrustedURL  }}"
 +                        class="page-link"
 +                        {{ if $.user.OpenExternalLinksInNewTab }}target="_blank"{{ end }}
 +                        rel="noopener noreferrer"
@@ -29,7 +29,7 @@ index 0b8e45dd..208f2407 100644
                  <li>
                      <button
                          class="page-button"
-@@ -167,7 +175,7 @@
+@@ -169,7 +177,7 @@
              {{ t "entry.tags.label" }}
              {{ $allTags := .entry.Tags }}
              {{ $numTags := len $allTags }}
@@ -38,20 +38,20 @@ index 0b8e45dd..208f2407 100644
              {{ $numerOfAdditionalTags := subtract $numTags $tagsLimit }}
  
              <ul class="entry-tags-list">
-@@ -202,12 +210,6 @@
+@@ -204,12 +212,6 @@
              {{ end }}
          </div>
          {{ end }}
 -        <div class="entry-external-link">
 -            <a
--                href="{{ .entry.URL | safeURL  }}"
+-                href="{{ .entry.URL | untrustedURL }}"
 -                {{ if $.user.OpenExternalLinksInNewTab }}target="_blank"{{ else }}rel="noopener"{{ end }}
 -                data-original-link="{{ $.user.MarkReadOnView }}">{{ .entry.URL }}</span></a>
 -        </div>
          <div class="entry-date">
              {{ if .user }}
              <time datetime="{{ isodate .entry.Date }}" title="{{ isodate .entry.Date }}">{{ elapsed $.user.Timezone .entry.Date }}</time>
-@@ -286,7 +288,7 @@
+@@ -288,7 +290,7 @@
      {{ end }}
  </article>
  {{ if .entry.Enclosures }}
