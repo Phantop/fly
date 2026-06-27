@@ -1,15 +1,24 @@
 diff --git i/internal/reader/rss/adapter.go w/internal/reader/rss/adapter.go
-index a33d72c1..deb8e460 100644
+index b1cd2d0f..028c16be 100644
 --- i/internal/reader/rss/adapter.go
 +++ w/internal/reader/rss/adapter.go
-@@ -151,7 +151,6 @@ func (r *rssAdapter) buildFeed(baseURL string) *model.Feed {
- 			entry.Tags = findFeedTags(&r.rss.Channel)
+@@ -445,13 +445,13 @@ func appendSortedSeq[I any, O cmp.Ordered](sorted []O, fn func(I) O, values iter
+ 			continue
  		}
- 		// Sort and deduplicate tags.
--		slices.Sort(entry.Tags)
- 		entry.Tags = slices.Compact(entry.Tags)
  
- 		feed.Entries = append(feed.Entries, entry)
+-		where, found := slices.BinarySearch(sorted, out)
++		_, found := slices.BinarySearch(sorted, out)
+ 		if found {
+ 			continue
+ 		}
+ 
+-		// Insert sorted to avoid duplicates.
+-		sorted = slices.Insert(sorted, where, out)
++		// Prevent sorting
++		sorted = append(sorted, out)
+ 	}
+ 
+ 	return sorted
 diff --git i/internal/template/templates/views/entry.html w/internal/template/templates/views/entry.html
 index b975d961..16cb0ce1 100644
 --- i/internal/template/templates/views/entry.html
